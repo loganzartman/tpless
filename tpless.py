@@ -49,13 +49,14 @@ class EditorApp(App):
         self.scroll_y = max(0, self.scroll_y + y)
     
     def search(self, s):
-        for i, line in enumerate(self.lines[self.scroll_y:]):
+        for i, line in enumerate(self.lines[self.scroll_y + 1:]):
             try:
                 line.index(s)
-                self.scroll_y += i
+                self.scroll_y += i + 1
                 break
             except:
                 pass
+        self._dirty = True
 
     def on_resize(self):
         self._dirty = True
@@ -68,38 +69,39 @@ class EditorApp(App):
             self._dirty = False
     
     def on_key(self, key):
-        if key == "down":
-            self.scroll(0, 1)
-        elif key == "up":
-            self.scroll(0, -1)
-        elif key == "left":
-            self.scroll(-1, 0)
-        elif key == "right":
-            self.scroll(1, 0)
-        elif key == "g":
-            self.scroll_y = 0
-            self._dirty = True
-        elif key == "G":
-            self.scroll_y = max(0, len(self.lines) - self.screen.h)
-            self._dirty = True
-        elif key == "q":
-            self._stopping = True
-        
         if not self.search_mode:
-            if key.char == "/":
+            if key == "down":
+                self.scroll(0, 1)
+            elif key == "up":
+                self.scroll(0, -1)
+            elif key == "left":
+                self.scroll(-1, 0)
+            elif key == "right":
+                self.scroll(1, 0)
+            elif key == "g":
+                self.scroll_y = 0
+                self._dirty = True
+            elif key == "G":
+                self.scroll_y = max(0, len(self.lines) - self.screen.h)
+                self._dirty = True
+            elif key == "q":
+                self._stopping = True
+            elif key.char == "/":
                 self.search_mode = True
                 self.input_buffer = []
                 self._dirty = True
-        elif key == "backspace":
-            self.input_buffer = self.input_buffer[:-1]
-            self._dirty = True
-        elif key == "\n" or key == "\r":
-            self.search("".join(self.input_buffer))
-            self.search_mode = False
-            self._dirty = True
-        elif key.char:
-            self.input_buffer.append(key.char)
-            self._dirty = True
+            elif key.char == "n" and len(self.input_buffer) > 0:
+                self.search("".join(self.input_buffer))
+        else:
+            if key == "backspace":
+                self.input_buffer = self.input_buffer[:-1]
+                self._dirty = True
+            elif key == "\n" or key == "\r":
+                self.search("".join(self.input_buffer))
+                self.search_mode = False
+            elif key.char:
+                self.input_buffer.append(key.char)
+                self._dirty = True
 
 if __name__ == "__main__":
     EditorApp().start()
