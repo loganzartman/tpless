@@ -1,7 +1,7 @@
 # tpless
 *a bad `less` clone built with [termpixels][termpixels]*
 
-![screenshot](promo.png)
+![screenshot](promo.PNG)
 
 ## Usage
 `tpless.py` accepts a file path as a command line argument, or data on stdin (though it does not yet support non-terminal stdin, e.g. a pipe). It sort of implements a few vim-like keybindings.
