@@ -29,7 +29,7 @@ class EditorApp(App):
         for i, line in enumerate(visible_lines):
             line_num = " {} │".format(str(1 + i + v_range[0]).zfill(line_numbers_w))
             line_text = self.process_line(line)[h_range[0]:h_range[1]]
-            self.screen.print(line_num, 0, i, fg=Color.rgb(0.7,0.7,0.7), bg=Color.rgb(0.2,0.2,0.2))
+            self.screen.print(line_num, 0, i, fg=Color.rgb(0,0.7,0), bg=Color.rgb(0,0.2,0))
             self.screen.print(line_text, len(line_num), i)
         
         if self.search_mode:
